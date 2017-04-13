@@ -1,0 +1,152 @@
+Transfer Learning Tfidf
+
+What is it?
+-----------
+Code to solve the Transfer Learning Kaggle Competition to predict tags of
+physics Stack Exchange queries given titles, content, and tags from Stack
+Exchange queries from six other topics (biology, cooking, crypto, diy,
+robotics, and travel).
+
+Dependencies
+___________________________________
+The following external packages are required to run this code
+
+bs4
+matplotlib
+numpy
+pandas
+pylab
+scipy.optimize
+
+Where do I run the code
+_______________
+All code is located within the code/ folder.
+
+How do I run it?
+----------------
+
+Data Cleaning
+________________
+First, you need to read in the input data, located in the input/ folder and
+clean it to remove equations, symbols and special characters. This
+can be done by running the input_files.py script as:
+
+"python input_files.py".
+
+This process takes a little less than an hour to run. It provides the cleaned
+dataframes in the following output files:
+
+biology_clean.csv
+cooking_clean.csv
+crypto_clean.csv
+diy_clean.csv
+robotics_clean.csv
+travel_clean.csv
+test_clean.csv
+
+Tf-idf construction
+___________________
+Second, you need to convert the words in the title and content of the stack
+exchange queries into a tf-idf dictionary. This can be done by running
+
+"python tf_idf.py %f", 
+
+where the last argument is a float between 0 and 1 and is optional. It
+represents the fraction of the data set that you want to consider in your
+analysis (good for performing sensitivity analysis). If this value is not
+specified, the tf-idf dataframes are constructed for the entire data set.
+
+This program will output the tf-idf word and bigram dataframes as the
+following csv files:
+
+biology_word.csv
+cooking_word.csv
+crypto_word.csv
+diy_word.csv
+robotics_word.csv
+travel_word.csv
+test_word.csv
+biology_bigram.csv
+cooking_bigram.csv
+crypto_bigram.csv
+diy_bigram.csv
+robotics_bigram.csv
+travel_bigram.csv
+test_bigram.csv
+
+Additionally, a number of histogram plots showing the distribution of tf-idf
+scores for bigrams and words are generated as:
+
+biology_word_histogram.pdf
+cooking_word_histogram.pdf
+crypto_word_histogram.pdf
+diy_word_histogram.pdf
+robotics_word_histogram.pdf
+travel_word_histogram.pdf
+test_word_histogram.pdf
+biology_bigram_histogram.pdf
+cooking_bigram_histogram.pdf
+crypto_bigram_histogram.pdf
+diy_bigram_histogram.pdf
+robotics_bigram_histogram.pdf
+travel_bigram_histogram.pdf
+test_bigram_histogram.pdf
+
+These can be useful for analysis and seeing the distribution of tf-idf
+scores. This runs in less than 10 minutes.
+
+Model Evaluation
+_________________
+Now that the tf-idf dataframes have been constructed, it is time to find the
+optimum parameters for your model. This is done by running:
+
+"python evaluate_model.py %f", where the last argument should be identical to
+the argument provided to tf_idf.py. It is optional and has the same meaning as
+the number provided in tf_idf.py: the fraction of entries to consider in the
+analysis. By default, it is set to 1. 
+
+This process takes ~4 hours to run. Throughout the run, the progress of the
+optimizer is printed out, where for each set of candidate parameters, the mean
+f1 score, accuracy and precision are printed for each of the 6 training
+topics. Additionally, the parameter values and harmonically averaged mean f1
+score are printed out to results1.csv.
+
+At the end of this, each data set is written out to a csv file with the
+predicted tags included in the file. Expected output should be:
+
+biology.csv
+cooking.csv
+crypto.csv
+diy.csv
+robotics.csv
+travel.csv
+test.csv
+
+Model Prediction
+___________________
+If you want to only predict physics tags with some given parameter values, you
+should run:
+
+"python predict_physics_tags %f %f %f",
+
+where the first argument is the word threshold, the second argument is the
+bigram threshold and the third argument is the word bigram threshold. In less
+than one minute, your results will be ready.
+
+Data Visualization
+_____________________
+Finally, to generate the plots shown in the final report for the project, run 
+
+"python visualize_data.py"
+
+This will provide the following pdf files as output:
+
+OptimizationSlice.pdf
+PercentageFoundDistribution.pdf
+TagCountDistribution.pdf
+TagWordNumberDistribution.pdf
+
+Project Summary
+_____________________
+The project proposal and final report can be found in the documentation
+folder. A figures subfolder provides all the folders used in the final report.
